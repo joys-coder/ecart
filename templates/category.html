@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.des|truncatewords:155 }}
+    {% else %}
+        Welcome to E-Cart store buy diffrent items...
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ category.name }} - E-Cart
+    {% else %}
+        Prime Special Items
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+    <div>
+        <div class="row my_cate">
+            <div class="mx-auto">
+                <p><a href="{% url 'shop:allProdCat' %}">Our Products</a></p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="mx-auto">
+        {% if category %}
+        <img class="my_img" src="{{category.image.url}}" alt="{{category.name}}">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my-title">{{category.name}}</h1>
+        <p class="text-justify">{{category.des}}</p>
+    </div>
+    {% else %}
+    <div class="row">
+        <img src="{% static 'image/banner.png' %}" alt="Our Products">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title">OUR PRODUCTS</h1>
+        <p class="text-justify my_des">Online shopping involves purchasing products or services over the Internet. Online shopping is done through an online shop, e-shop, e-store, virtual store, webshop, Internet shop or online store. All the products in online stores are described through text, with photos and with multimedia files. Many online stores will provide links for extra information about their products. They often make available, safety procedures, instructions, manufacture specification and demonstrations. Some will provide advice or how-to guides. As you are already on the Internet, you can search for product reviews that other consumers may have posted. Some online stores have place for these reviews on their own sites. Many allow users to rate their products. Advice such as this from other consumers, about a product, would be unavailable in a conventional store.
+
+            There are many advantages involved with online shopping, the most obvious of which is convenience. As long as you have a computer, online shopping can be done from home or from work. There is no need to take the time to travel to a conventional store. Also, online shops typically operate 24 hours a day so you don't need to rush to get there during business hours. Particularly if you have a broadband Internet connection, browsing online can be done very quickly - in fact, it can be quicker than browsing up and down the aisles of a physical shop.</p>
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="row mx-auto">
+            {% for product in products.object_list %}
+            <div class="my_pro_mar col-9 col-sm-12 col-md-4 col-lg-4">
+                <div class="card text-center m-2" style="min-width: 18rem;">
+                    <a href="{{ product.get_url }}"><img class="card-img-top my_img" src="{{product.image.url}}" alt="{{product.name}"></a>
+                    <div class="card-body">
+                        <h3>{{product.name}}</h1>
+                        <p>{{product.price}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                    <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+
+{% endblock %}
+
